@@ -10,7 +10,7 @@ class MgmtsystemMgmMRP(models.Model):
     Extend nonconformity adding fields for workcenter
     """
 
-    _inherit = ["mgmtsystem.nonconformity"]
+    _inherit = "mgmtsystem.nonconformity"
 
     # new fields
     # workcenter reference
