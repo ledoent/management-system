@@ -2,7 +2,7 @@
 # Copyright 2019 Stefano Consolaro (Ass. PNLUG - Gruppo Odoo <http://odoo.pnlug.it>)
 # Copyright 2020 Creu Blanca
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
 
 class MgmtsystemAction(models.Model):
@@ -26,7 +26,7 @@ class MgmtsystemAction(models.Model):
         """
 
         if self.template_id:
-            self.name = _("NEW") + " " + self.template_id.name
+            self.name = self.env._("NEW") + " " + self.template_id.name
             self.type_action = self.template_id.type_action
             self.description = self.template_id.description
             self.user_id = self.template_id.user_id

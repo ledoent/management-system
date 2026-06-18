@@ -1,4 +1,3 @@
-from odoo import _
 from odoo.tests.common import TransactionCase
 
 
@@ -12,11 +11,15 @@ class TestModelNonConformity(TransactionCase):
         self.action_model = self.env["mgmtsystem.action"]
         self.action_template_model = self.env["mgmtsystem.action.template"]
 
+        self.action = self.action_model.create(
+            {"name": "Test Action", "type_action": "immediate"}
+        )
+
         # create a template action
         self.action_template = self.action_template_model.create(
             {
                 "name": "Test Template",
-                "type_action": self.action_model.search([])[0]["type_action"],
+                "type_action": self.action.type_action,
             }
         )
 
@@ -24,11 +27,11 @@ class TestModelNonConformity(TransactionCase):
         """
         Test set Action template
         """
-        self.action = self.action_model.search([])[0]
-
         self.action["template_id"] = self.action_template["id"]
         self.action._onchange_template_id()
 
         self.assertEqual(
-            self.action["name"] == _("NEW") + " " + self.action_template["name"], True
+            self.action["name"]
+            == self.env._("NEW") + " " + self.action_template["name"],
+            True,
         )
