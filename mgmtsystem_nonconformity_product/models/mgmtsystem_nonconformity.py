@@ -9,7 +9,7 @@ class MgmtsystemNonconformity(models.Model):
     Extend nonconformity adding fields for product
     """
 
-    _inherit = ["mgmtsystem.nonconformity"]
+    _inherit = "mgmtsystem.nonconformity"
 
     # new fields
     # product reference
