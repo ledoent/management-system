@@ -1,24 +1,35 @@
-from odoo import _
 from odoo.exceptions import ValidationError
 from odoo.tests.common import TransactionCase
 
 
 class TestModelNonConformity(TransactionCase):
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         """
         Sets some enviroment
         """
-        super().setUp()
+        super().setUpClass()
+        cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
 
-        self.nc_model = self.env["mgmtsystem.nonconformity"]
-        self.partner_model = self.env["res.partner"]
-
-        self.nc = self.nc_model.search([])[0]
-        self.partner = self.partner_model.search([("child_ids", "!=", False)])[0]
-
-        self.nc["partner_id"] = self.partner
-        self.nc["qty_checked"] = 100
-        self.nc["qty_noncompliant"] = 50
+        cls.nc_model = cls.env["mgmtsystem.nonconformity"]
+        cls.partner = cls.env["res.partner"].create(
+            {
+                "name": "Test NC Partner",
+                "child_ids": [
+                    (0, 0, {"name": "Quality Contact", "email": "quality@example.com"})
+                ],
+            }
+        )
+        cls.nc = cls.nc_model.create(
+            {
+                "partner_id": cls.partner.id,
+                "manager_user_id": cls.env.user.id,
+                "responsible_user_id": cls.env.user.id,
+                "description": "description",
+                "qty_checked": 100,
+                "qty_noncompliant": 50,
+            }
+        )
 
     def test_nc(self):
         """
@@ -54,7 +65,7 @@ class TestModelNonConformity(TransactionCase):
         with self.assertRaises(ValidationError) as e:
             self.assertEqual(True, self.nc.action_nc_sent(test_module))
         self.assertIn(
-            _(
+            self.env._(
                 "The partner's contacts quality type isn't available.\n "
                 "Check if module mgmtsystem_nonconformity_partner is installed."
             ),
@@ -66,7 +77,7 @@ class TestModelNonConformity(TransactionCase):
         with self.assertRaises(ValidationError) as e:
             self.assertEqual(True, self.nc.action_nc_sent())
         self.assertIn(
-            _(
+            self.env._(
                 "The partner's quality contact email "
                 "is required in order to send the message."
             ),

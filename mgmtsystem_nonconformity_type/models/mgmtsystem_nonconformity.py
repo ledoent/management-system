@@ -1,6 +1,7 @@
 # Copyright 2019 Stefano Consolaro (Ass. PNLUG - Gruppo Odoo <http://odoo.pnlug.it>)
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class MgmtsystemNonconformity(models.Model):
@@ -10,7 +11,7 @@ class MgmtsystemNonconformity(models.Model):
     adding method to send email
     """
 
-    _inherit = ["mgmtsystem.nonconformity"]
+    _inherit = "mgmtsystem.nonconformity"
 
     # new fields
     # nonconformity type
@@ -65,11 +66,11 @@ class MgmtsystemNonconformity(models.Model):
             or test_module
         ):
             # raise an error for module not installed
-            message = _(
+            message = self.env._(
                 "The partner's contacts quality type isn't available.\n "
                 "Check if module mgmtsystem_nonconformity_partner is installed."
             )
-            raise models.ValidationError(message)
+            raise ValidationError(message)
 
         # get first contact of type quality
         contact_quality = self.partner_id["child_ids"].search(
@@ -89,8 +90,8 @@ class MgmtsystemNonconformity(models.Model):
 
         else:
             # raise an error for field not compiled
-            raise models.ValidationError(
-                _(
+            raise ValidationError(
+                self.env._(
                     "The partner's quality contact email "
                     "is required in order to send the message."
                 )
