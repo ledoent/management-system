@@ -1,0 +1,2 @@
+# DO NOT MERGE — temporary pin until mgmtsystem_partner 19.0 is published.
+odoo-addon-mgmtsystem_partner @ git+https://github.com/ledoent/management-system.git@19.0-mig-mgmtsystem_partner#subdirectory=mgmtsystem_partner
