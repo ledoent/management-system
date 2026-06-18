@@ -19,7 +19,7 @@
 ##############################################################################
 from datetime import datetime, timedelta
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
 
 class MgmtsystemClaim(models.Model):
@@ -43,14 +43,14 @@ class MgmtsystemClaim(models.Model):
 
     @api.model
     def get_default_stage(self):
-        return self.env["mgmtsystem.claim.stage"].search([])[0].id
+        return self.env["mgmtsystem.claim.stage"].search([], limit=1).id
 
     @api.model_create_multi
     def create(self, vals_list):
         for one_vals in vals_list:
-            if one_vals.get("reference", _("New")) == _("New"):
+            if one_vals.get("reference", self.env._("New")) == self.env._("New"):
                 Sequence = self.env["ir.sequence"]
-                one_vals["reference"] = Sequence.next_by_code("mgmtsystem.action")
+                one_vals["reference"] = Sequence.next_by_code("mgmtsystem.claim")
         actions = super().create(vals_list)
         actions.send_mail_for_action()
         return actions

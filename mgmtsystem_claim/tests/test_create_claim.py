@@ -60,7 +60,7 @@ class TestModelClaim(common.TransactionCase):
         self.claim.write(
             {
                 "date_deadline": ten_days_date,  # 10 days from now
-                "stage_id": self.env.ref("mgmtsystem_action.stage_open").id,
+                "stage_id": self.env.ref("mgmtsystem_claim.stage_open").id,
             }
         )
         with mock.patch("time.time", freeze_time(ten_days_date)):
