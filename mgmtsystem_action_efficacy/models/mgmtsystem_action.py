@@ -2,7 +2,7 @@
 # Copyright 2019 Stefano Consolaro (Ass. PNLUG - Gruppo Odoo <http://odoo.pnlug.it>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -32,5 +32,5 @@ class MgmtsystemAction(models.Model):
     @api.onchange("efficacy_value")
     def _onchange_efficacy_value(self):
         if self.efficacy_value < 0 or self.efficacy_value > 100:
-            raise ValidationError(_("Rating must be between 0 and 100"))
+            raise ValidationError(self.env._("Rating must be between 0 and 100"))
         return
