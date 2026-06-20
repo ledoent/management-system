@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Ledoweb - License AGPL-3.0 or later -->
+<odoo>
+    <record id="view_mgmtsystem_security_control_form" model="ir.ui.view">
+        <field name="name">mgmtsystem.security.control.form.privilege</field>
+        <field name="model">mgmtsystem.security.control</field>
+        <field
+            name="inherit_id"
+            ref="mgmtsystem_security_event.view_mgmtsystem_security_control_form"
+        />
+        <field name="arch" type="xml">
+            <field name="work_instruction_id" position="after">
+                <field name="iso27001_ref" placeholder="A.5.15" />
+                <field name="iso27001_theme" />
+                <field name="privilege_ids" widget="many2many_tags" />
+                <field
+                    name="group_ids"
+                    widget="many2many_tags"
+                    readonly="1"
+                    invisible="not privilege_ids"
+                />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_mgmtsystem_security_control_list" model="ir.ui.view">
+        <field name="name">mgmtsystem.security.control.list.privilege</field>
+        <field name="model">mgmtsystem.security.control</field>
+        <field
+            name="inherit_id"
+            ref="mgmtsystem_security_event.view_mgmtsystem_security_control_list"
+        />
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="iso27001_ref" optional="show" />
+                <field name="iso27001_theme" optional="show" />
+                <field name="privilege_ids" widget="many2many_tags" optional="show" />
+            </field>
+        </field>
+    </record>
+</odoo>
